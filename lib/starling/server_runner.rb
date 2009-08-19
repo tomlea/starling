@@ -109,6 +109,10 @@ module StarlingServer
           options[:port] = port
         end
 
+        opts.on("-wTIME", "--wait_time TIME", Float, "Wait time for the queue (default: 0)") do |wait_time|
+          options[:wait_time] = wait_time
+        end
+
         opts.separator ""; opts.separator "Process:"
 
         opts.on("-d", "Run as a daemon.") do

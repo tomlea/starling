@@ -6,6 +6,7 @@ require 'eventmachine'
 here = File.dirname(__FILE__)
 
 require File.join(here, 'queue_collection')
+require File.join(here, 'slow_queue_collection')
 require File.join(here, 'handler')
 
 module StarlingServer
@@ -83,7 +84,11 @@ module StarlingServer
                    end
 
       begin
-        @opts[:queue] = QueueCollection.new(@opts[:path])
+        if @opts[:wait_time]
+          @opts[:queue] = SlowQueueCollection.new(@opts[:path], @opts[:wait_time])
+        else
+          @opts[:queue] = QueueCollection.new(@opts[:path])
+        end
       rescue InaccessibleQueuePath => e
         puts "Error: #{e.message}"
         exit 1

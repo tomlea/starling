@@ -94,7 +94,7 @@ module StarlingServer
           # been loaded. There's a race condition otherwise, and we could
           # end up loading the queue multiple times.
           if @queues[key].nil?
-            @queues[key] = PersistentQueue.new(@path, key)
+            @queues[key] = new_queue(key)
             @stats[:current_bytes] += @queues[key].initial_bytes
           end
         rescue Object => exc
@@ -106,6 +106,10 @@ module StarlingServer
       end
 
       return @queues[key]
+    end
+
+    def new_queue(key)
+      PersistentQueue.new(@path, key)
     end
 
     ##
